@@ -32,7 +32,7 @@ public class Utils {
       } else if(type.equals(LogType.Horrible)){
          p.sendMessage(Utils.color("&4" + msg));
       } else if(type.equals(LogType.Error)){
-         p.sendMessage(Utils.color("&8[&4PHPSend ERROR!&8]&4" + msg, false));
+         p.sendMessage(Utils.color("&8[&4PHPSendERROR!&8]&4" + msg, false));
       }
    }
    
