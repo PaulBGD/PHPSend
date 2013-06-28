@@ -1,7 +1,9 @@
-package main.java.org.shadowz.phpsend;
+package main.java.org.shadowz.phpsend.Connectors;
 
 import java.io.*;
 import java.net.*;
+
+import main.java.org.shadowz.phpsend.MainPhpSend;
 
 public class ConnectorOut {
    public Socket mSocket = null;

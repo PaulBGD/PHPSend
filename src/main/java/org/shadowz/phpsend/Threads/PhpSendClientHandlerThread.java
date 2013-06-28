@@ -1,4 +1,7 @@
-package main.java.org.shadowz.phpsend;
+package main.java.org.shadowz.phpsend.Threads;
+
+import main.java.org.shadowz.phpsend.PhpSendPlugin;
+import main.java.org.shadowz.phpsend.Connectors.Connector;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;

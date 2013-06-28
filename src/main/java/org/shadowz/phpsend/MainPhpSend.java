@@ -10,6 +10,9 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import main.java.org.shadowz.phpsend.Connectors.ConnectorOut;
+import main.java.org.shadowz.phpsend.Threads.PhpSendListenThread;
+
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -23,14 +26,14 @@ public class MainPhpSend extends JavaPlugin {
 
    ConnectorOut out = null;
 
-   List<PhpSendPlugin> plugins;
+   public List<PhpSendPlugin> plugins;
 
    //config vars
    public int port;
    public String password;
-   int logLevel;
-   boolean useWhitelist;
-   int maxthreads;
+   public int logLevel;
+   public boolean useWhitelist;
+   public int maxthreads;
 
    public void err(String x) {
       if (logLevel >= 1)

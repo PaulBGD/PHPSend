@@ -1,15 +1,18 @@
-package main.java.org.shadowz.phpsend;
+package main.java.org.shadowz.phpsend.Threads;
 
 import java.util.logging.Logger;
 
+import main.java.org.shadowz.phpsend.MainPhpSend;
+import main.java.org.shadowz.phpsend.Connectors.Connector;
+
 public class PhpSendListenThread implements Runnable {
 
-   Connector con;
+   public Connector con;
 
    MainPhpSend up;
    Logger log;
 
-   int threads;
+   public int threads;
 
    boolean run = true;
 

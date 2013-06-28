@@ -1,7 +1,9 @@
-package main.java.org.shadowz.phpsend;
+package main.java.org.shadowz.phpsend.Connectors;
 
 import java.io.*;
 import java.net.*;
+
+import main.java.org.shadowz.phpsend.Threads.PhpSendListenThread;
 
 public class Connector {
    ServerSocket sSocket;
@@ -9,13 +11,13 @@ public class Connector {
    public BufferedWriter out = null;
    public BufferedReader in = null;
    public int DEFAULTPORT = 11223;
-   PhpSendListenThread up = null;
+   public PhpSendListenThread up = null;
 
    public Connector(PhpSendListenThread _up) {
       up = _up;
    }
 
-   Connector passConnection() {
+   public Connector passConnection() {
       Connector c = new Connector(up);
       c.mSocket = mSocket;
       c.in = in;
