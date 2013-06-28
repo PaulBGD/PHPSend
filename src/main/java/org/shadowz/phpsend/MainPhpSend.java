@@ -102,29 +102,30 @@ public class MainPhpSend extends JavaPlugin {
    }
 
    public void reloadWhitelist() {
-      if (fwlist != null)
-         fwlist = null;
+      if (useWhitelist) {
+         if (fwlist != null)
+            fwlist = null;
+         try {
+            File f = new File(getDataFolder(), "wlist.txt");
 
-      try {
-         File f = new File(getDataFolder(), "wlist.txt");
+            if (!f.exists()) {
+               Utils.log("WHITELIST ENABLED IN CONFIG BUT NO FILE FOUND!", LogType.Broken);
+               return;
+            }
 
-         if (!f.exists()) {
-            Utils.log("WHITELIST ENABLED IN CONFIG BUT NO FILE FOUND!", LogType.Broken);
+            fwlist = new FileInputStream(f);
+            BufferedReader r = new BufferedReader(new InputStreamReader(fwlist));
+            String line;
+
+            while ((line = r.readLine()) != null)
+               wlist.add(line);
+         } catch (Exception e) {
+            Utils.log("WHITELIST ENABLED IN CONFIG BUT NO FILE FOUND!\n" + e.getStackTrace(), LogType.Error);
             return;
          }
 
-         fwlist = new FileInputStream(f);
-         BufferedReader r = new BufferedReader(new InputStreamReader(fwlist));
-
-         String line;
-         while ((line = r.readLine()) != null)
-            wlist.add(line);
-      } catch (Exception e) {
-         Utils.log("WHITELIST ENABLED IN CONFIG BUT NO FILE FOUND!", LogType.Broken);
-         return;
+         Utils.log("Loaded " + wlist.size() + " whitelisted adresses");
       }
-
-      Utils.log("Loaded " + wlist.size() + " whitelisted adresses");
    }
 
    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {

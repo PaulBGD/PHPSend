@@ -1,0 +1,12 @@
+name: PHPsend
+main: main.java.org.shadowz.phpsend.MainPhpSend
+version: 1.1
+commands:
+    website:
+       description: Sends post request to website and outputs results.
+       permission: phpsend.website
+       usage: /<command> <key1> <val1> <key2> <val2> ...
+    phpsend:
+       description: PHPsend command
+       permission: phpsend.admin
+       usage: /<command> <action>

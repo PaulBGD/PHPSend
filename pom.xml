@@ -1,11 +1,10 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
-  <groupId>PHPSend</groupId>
+  <groupId>org.shadowz.phpsend</groupId>
   <artifactId>PHPSend</artifactId>
-  <version>1.2.1 - dev</version>
+  <version>1.2.2-dev</version>
   <name>PHPSend</name>
-  <description>PHPSend - Bukkit Plugin
-</description>
+  <description>PHPSend - Bukkit Plugin</description>
   <build>
     <resources>
 			<resource>
