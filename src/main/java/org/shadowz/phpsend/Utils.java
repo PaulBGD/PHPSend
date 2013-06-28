@@ -36,7 +36,7 @@ public class Utils {
          p.sendMessage(Utils.color("&c" + msg));
          p.sendMessage(Utils.color("&8 -=-=- &c End PHPSend Message &8-=-=-", false));
       } else if(type.equals(LogType.Horrible)){
-         p.sendMessage(Utils.color("&8 -=-=- &4PHPSend: Something Happened! &8-=-=-", false));
+         p.sendMessage(Utils.color("&8 -=- &4PHPSend: Something Happened! &8-=-", false));
          p.sendMessage(Utils.color("&4" + msg));
          p.sendMessage(Utils.color("&8 -=-=- &4 End PHPSend Message &8-=-=-", false));
       } else if(type.equals(LogType.Error)){
