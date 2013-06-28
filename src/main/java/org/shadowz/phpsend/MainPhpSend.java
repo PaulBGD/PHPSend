@@ -7,11 +7,11 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import main.java.org.shadowz.phpsend.Connectors.ConnectorOut;
 import main.java.org.shadowz.phpsend.Threads.PhpSendListenThread;
+import main.java.org.shadowz.phpsend.Utils;
+import main.java.org.shadowz.phpsend.Utils.LogType;
 
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
@@ -21,8 +21,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class MainPhpSend extends JavaPlugin {
-   public Logger log = null;
-   PhpSendListenThread t = null;
+   PhpSendListenThread listenThread = null;
 
    ConnectorOut out = null;
 
@@ -35,21 +34,6 @@ public class MainPhpSend extends JavaPlugin {
    public boolean useWhitelist;
    public int maxthreads;
 
-   public void err(String x) {
-      if (logLevel >= 1)
-         log.info("(ERR) " + x);
-   }
-
-   public void info(String x) {
-      if (logLevel >= 2)
-         log.info("(INF) " + x);
-   }
-
-   public void debug(String x) {
-      if (logLevel >= 3)
-         log.info("(DBG) " + x);
-   }
-
    public static boolean registerPlugin(PhpSendPlugin phpsendapi, String ID) {
       MainPhpSend phpsend = (MainPhpSend) Bukkit.getPluginManager().getPlugin("PHPsend");
       if (phpsend == null)
@@ -61,8 +45,6 @@ public class MainPhpSend extends JavaPlugin {
    }
 
    public void onEnable() {
-      log = this.getLogger();
-
       plugins = new ArrayList<PhpSendPlugin>();
       wlist = new ArrayList<String>();
 
@@ -76,19 +58,19 @@ public class MainPhpSend extends JavaPlugin {
 
       out = new ConnectorOut();
 
-      t = new PhpSendListenThread(this);
-      new Thread(t).start();
-      info("PHPsend started main thread.");
+      listenThread = new PhpSendListenThread(this);
+      new Thread(listenThread).start();
+      Utils.log("PHPsend started main thread.");
    }
 
    public void onDisable() {
-      t.shutdown();
-      t.con.drop();
-      t = null;
-      info("PHPsend disabled succesfully!");
+      listenThread.shutdown();
+      listenThread.con.drop();
+      listenThread = null;
+      Utils.log("PHPsend disabled succesfully!");
    }
 
-   /* Config operation methods by Chlorek*/
+   // Config operation methods by Chlorek
    private static FileConfiguration configFile = null;
    private static File file = null;
    private static FileInputStream fwlist = null;
@@ -100,7 +82,7 @@ public class MainPhpSend extends JavaPlugin {
          file = new File(getDataFolder(), "config.yml");
 
          if (!file.exists()) {
-            info("No config found! Writing default config.");
+            Utils.log("No config found! Writing default config.", LogType.Bad);
             String pass = Long.toHexString(Double.doubleToLongBits(Math.random())); //random password
 
             getConfig().set("password", pass);
@@ -114,7 +96,7 @@ public class MainPhpSend extends JavaPlugin {
 
             saveConfig();
          } else
-            info("Config loaded.");
+            Utils.log("Config loaded.");
       }
       configFile = YamlConfiguration.loadConfiguration(file);
    }
@@ -127,7 +109,7 @@ public class MainPhpSend extends JavaPlugin {
          File f = new File(getDataFolder(), "wlist.txt");
 
          if (!f.exists()) {
-            err("WHITELIST ENABLED IN CONFIG BUT NO FILE FOUND!");
+            Utils.log("WHITELIST ENABLED IN CONFIG BUT NO FILE FOUND!", LogType.Broken);
             return;
          }
 
@@ -138,11 +120,11 @@ public class MainPhpSend extends JavaPlugin {
          while ((line = r.readLine()) != null)
             wlist.add(line);
       } catch (Exception e) {
-         err("WHITELIST ENABLED IN CONFIG BUT NO FILE FOUND!");
+         Utils.log("WHITELIST ENABLED IN CONFIG BUT NO FILE FOUND!", LogType.Broken);
          return;
       }
 
-      info("Loaded " + wlist.size() + " whitelisted adresses");
+      Utils.log("Loaded " + wlist.size() + " whitelisted adresses");
    }
 
    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
@@ -179,7 +161,7 @@ public class MainPhpSend extends JavaPlugin {
             return true;
          }
          if (args[0].equals("connections") && args.length == 1) {
-            sender.sendMessage("Active connections: " + t.threads + " / " + maxthreads);
+            sender.sendMessage("Active connections: " + listenThread.threads + " / " + maxthreads);
             return true;
          } else
             return false;
@@ -192,7 +174,7 @@ public class MainPhpSend extends JavaPlugin {
 
       for (int i = 0; i < args.length; i++) {
          if (args[i].indexOf('=') == -1) {
-            err("Website command, arg[" + i + "] has no equation (\"=\") character...");
+            Utils.log("Website command, arg[" + i + "] has no equation (\"=\") character...", LogType.Bad);
             return "";
          }
          vargs[i] = args[i];
@@ -200,11 +182,11 @@ public class MainPhpSend extends JavaPlugin {
       String postPassword = getConfig().getString("postPassword");
 
       if (postPassword == null) {
-         err("No post password set.");
+         Utils.log("No post password set.", LogType.Bad);
          return "";
       }
       vargs[args.length] = "PHPSpass=" + sha1(postPassword);
-      return t.con.post(addr, vargs);
+      return listenThread.con.post(addr, vargs);
    }
 
    public String post(String args[]) {
@@ -225,7 +207,7 @@ public class MainPhpSend extends JavaPlugin {
       try {
          configFile.save(file);
       } catch (IOException e) {
-         Logger.getLogger(JavaPlugin.class.getName()).log(Level.SEVERE, "Could not save config to " + file, e);
+         Utils.log("Could not save config to " + file, LogType.Broken);
       }
    }
 

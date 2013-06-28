@@ -9,7 +9,7 @@ public abstract class PhpSendPlugin {
    public abstract boolean onWebCommandAsPlayer(String player, String r);
 
    public boolean send(String msg) {
-      return up.t.con.Send(name + ":" + msg);
+      return up.listenThread.con.Send(name + ":" + msg);
    }
 
    public boolean connect(String host, String password, String port) {
