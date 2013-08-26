@@ -7,6 +7,7 @@
 	<name>PHPSend</name>
 	<description>PHPSend - Bukkit Plugin</description>
 	<build>
+	<finalName>PHPSend.jar</finalName>
 		<resources>
 			<resource>
 				<targetPath>.</targetPath>
