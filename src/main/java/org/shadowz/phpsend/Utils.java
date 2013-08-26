@@ -1,4 +1,4 @@
-package main.java.org.shadowz.phpsend;
+package org.shadowz.phpsend;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;

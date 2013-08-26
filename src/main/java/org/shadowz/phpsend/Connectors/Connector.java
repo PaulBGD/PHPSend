@@ -1,9 +1,17 @@
-package main.java.org.shadowz.phpsend.Connectors;
+package org.shadowz.phpsend.Connectors;
 
-import java.io.*;
-import java.net.*;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.net.URL;
+import java.net.URLConnection;
+import java.net.URLEncoder;
 
-import main.java.org.shadowz.phpsend.Threads.PhpSendListenThread;
+import org.shadowz.phpsend.Threads.PhpSendListenThread;
 
 public class Connector {
    ServerSocket sSocket;

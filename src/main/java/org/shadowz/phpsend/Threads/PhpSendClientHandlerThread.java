@@ -1,10 +1,10 @@
-package main.java.org.shadowz.phpsend.Threads;
-
-import main.java.org.shadowz.phpsend.PhpSendPlugin;
-import main.java.org.shadowz.phpsend.Connectors.Connector;
+package org.shadowz.phpsend.Threads;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.shadowz.phpsend.API.WebCommandEvent;
+import org.shadowz.phpsend.API.WebPlayerCommandEvent;
+import org.shadowz.phpsend.Connectors.Connector;
 
 public class PhpSendClientHandlerThread implements Runnable {
 
@@ -50,11 +50,14 @@ public class PhpSendClientHandlerThread implements Runnable {
          }
 
          boolean passFurther = true;
-         for (PhpSendPlugin a : con.up.up.plugins) {
-            if (player.equals("[server]"))
-               passFurther &= a.onWebCommand(r);
-            else
-               passFurther &= a.onWebCommandAsPlayer(player, r);
+         if (player.equals("[server]")) {
+            WebCommandEvent event = new WebCommandEvent(r);
+            Bukkit.getPluginManager().callEvent(event);
+            passFurther = !event.isCancelled();
+         } else {
+            WebPlayerCommandEvent event = new WebPlayerCommandEvent(p, r);
+            Bukkit.getPluginManager().callEvent(event);
+            passFurther = !event.isCancelled();
          }
 
          con.up.info("PHP command: " + r);

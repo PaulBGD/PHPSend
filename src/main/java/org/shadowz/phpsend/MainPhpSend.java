@@ -1,4 +1,4 @@
-package main.java.org.shadowz.phpsend;
+package org.shadowz.phpsend;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -8,24 +8,21 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
-import main.java.org.shadowz.phpsend.Connectors.ConnectorOut;
-import main.java.org.shadowz.phpsend.Threads.PhpSendListenThread;
-import main.java.org.shadowz.phpsend.Utils;
-import main.java.org.shadowz.phpsend.Utils.LogType;
-
-import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.shadowz.phpsend.Utils.LogType;
+import org.shadowz.phpsend.API.PHPSendAPI;
+import org.shadowz.phpsend.Connectors.ConnectorOut;
+import org.shadowz.phpsend.Threads.PhpSendListenThread;
 
 public class MainPhpSend extends JavaPlugin {
    PhpSendListenThread listenThread = null;
+   PHPSendAPI api;
 
    ConnectorOut out = null;
-
-   public List<PhpSendPlugin> plugins;
 
    //config vars
    public int port;
@@ -34,18 +31,7 @@ public class MainPhpSend extends JavaPlugin {
    public boolean useWhitelist;
    public int maxthreads;
 
-   public static boolean registerPlugin(PhpSendPlugin phpsendapi, String ID) {
-      MainPhpSend phpsend = (MainPhpSend) Bukkit.getPluginManager().getPlugin("PHPsend");
-      if (phpsend == null)
-         return false;
-      phpsendapi.up = phpsend;
-      phpsendapi.name = ID;
-      phpsend.plugins.add((PhpSendPlugin) phpsendapi);
-      return true;
-   }
-
    public void onEnable() {
-      plugins = new ArrayList<PhpSendPlugin>();
       wlist = new ArrayList<String>();
 
       reloadConfig();
@@ -60,6 +46,7 @@ public class MainPhpSend extends JavaPlugin {
 
       listenThread = new PhpSendListenThread(this);
       new Thread(listenThread).start();
+      api = new PHPSendAPI(this, listenThread);
       Utils.log("PHPsend started main thread.");
    }
 
